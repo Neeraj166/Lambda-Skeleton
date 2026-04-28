@@ -48,6 +48,9 @@ class LambdaHandler:
             data = self.parse_event(event)
             self.initialize_services(data)
 
+            # TODO: Add your business logic here
+            # INFO: Make a service call here
+
             message = "Process completed"
 
         except Exception:
