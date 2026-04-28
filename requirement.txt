@@ -1,0 +1,3 @@
+requests
+pytz
+git+https://github.com/Neeraj166/stcore
