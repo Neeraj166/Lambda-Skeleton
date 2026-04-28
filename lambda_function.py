@@ -25,7 +25,12 @@ class LambdaHandler:
         """
         Parse the event and extract the body
         """
-        body = event.get('Records', [{}])[0].get('body', '{}')
+        # For SNS events
+        body = event.get('Records', [{}])[0].get('Sns', {}).get('Message', '{}')
+        
+        # For SQS events
+        # body = event.get('Records', [{}])[0].get('body', '{}')
+        
         return json.loads(body)
 
     def close_connections(self):
@@ -50,6 +55,8 @@ class LambdaHandler:
 
             # TODO: Add your business logic here
             # INFO: Make a service call here
+            from services.test_service import TestService
+            TestService().test()
 
             message = "Process completed"
 
@@ -80,9 +87,18 @@ if __name__ == "__main__":
     }
 
     test_event = {
-        'Records': [{
-            'body': json.dumps(test_data),
-        }]
-    }
+            'Records': [{
+                'Sns': {
+                    'Message': json.dumps(test_data),
+                }
+            }]
+        }
+
+    # For SQS events
+    # test_event = {
+    #     'Records': [{
+    #         'body': json.dumps(test_data),
+    #     }]
+    # }
 
     lambda_handler(test_event, 0)
